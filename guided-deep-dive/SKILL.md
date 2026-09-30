@@ -75,8 +75,6 @@ Point to the most authoritative source, and name the exact section:
 3. **Official guidelines**: API guidelines, style guides, RFCs, tracking issues.
 4. **Well-established projects** that solved the same problem, with the specific item named. Check claims about other projects (read the source or docs) before stating them. If you can't check something, say so.
 
-See `references/sources.md` for starting points by ecosystem.
-
 ## Building toward the decision
 
 Along the way, name a **single measure** for comparing designs once it has come out of an experiment. For example: "how many hand-written copies of this list exist, and does the compiler notice when one is wrong?" Each later design is judged by the same measure, which turns a pile of facts into an argument the learner can make.
