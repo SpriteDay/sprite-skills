@@ -1,10 +1,10 @@
 ---
-name: guided-deep-dive
+name: deep-dive
 description: >-
   Step-by-step mentoring that takes the learner from basics to a full understanding of a topic, design, or codebase change. Each step is one small task, one question, and a pointer to an authoritative source. You check their work and fill gaps in fundamentals before moving on. Use this whenever the user wants to understand something in depth rather than have it done for them: preparing an open-source contribution or issue, understanding a design an AI or reviewer suggested so they can defend or change it, learning a language feature through a practice project, or anything phrased as "guide me", "walk me through", "one step at a time", "teach me", "I want to understand why", "help me prepare before I contribute", or "I don't want the answer, I want to get there myself". Also use it when they set up a scratch or practice project to explore an idea. Don't use it when the user just wants the task done.
 ---
 
-# Guided deep dive
+# Deep dive
 
 The learner wants to *earn* their understanding, not receive it. They're usually preparing to contribute to a project or to defend a design, where a half-understood answer is a real liability: a maintainer will ask "why not X?" and they need an answer they worked out themselves. So your job is to set up small tasks in which they discover each piece themselves, check what they did, and keep them moving. You are not there to explain everything up front or to write their code.
 
