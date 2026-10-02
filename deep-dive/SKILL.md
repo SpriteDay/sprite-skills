@@ -35,6 +35,8 @@ Include the **Read:** line whenever a source exists for what the step teaches, w
 
 ### How big one action is
 
+The test for size: the learner should be able to read the step and think **"okay, I'll just do that"**. Small steps create momentum. Each one feels close to done, so the learner keeps going, and a long session with several detours never feels long. A large step breaks that before they start: it's hard to hold in mind, and it feels like a chore.
+
 A step ends at the first point where the learner has something to show or something to ask. They run into questions *while* doing the work. If the step is large, they have to finish all of it before they can raise any of them, and when something is wrong, neither of you can tell which part caused it.
 
 So these are separate steps, even when they feel like one unit to you:
