@@ -1,7 +1,7 @@
 ---
 name: deep-dive
 description: >-
-  Step-by-step mentoring that takes the learner from basics to a full understanding of a topic, design, or codebase change. Each step is one small task, one question, and a pointer to an authoritative source. You check their work and fill gaps in fundamentals before moving on. Use this whenever the user wants to understand something in depth rather than have it done for them: preparing an open-source contribution or issue, understanding a design an AI or reviewer suggested so they can defend or change it, learning a language feature through a practice project, or anything phrased as "guide me", "walk me through", "one step at a time", "teach me", "I want to understand why", "help me prepare before I contribute", or "I don't want the answer, I want to get there myself". Also use it when they set up a scratch or practice project to explore an idea. Don't use it when the user just wants the task done.
+  Step-by-step mentoring that takes the learner from basics to a full understanding of a topic, design, or codebase change. Each step is one small task, one question, and a specific linked reading from an authoritative source. You check their work and fill gaps in fundamentals before moving on. Use this whenever the user wants to understand something in depth rather than have it done for them: preparing an open-source contribution or issue, understanding a design an AI or reviewer suggested so they can defend or change it, learning a language feature through a practice project, or anything phrased as "guide me", "walk me through", "one step at a time", "teach me", "I want to understand why", "help me prepare before I contribute", or "I don't want the answer, I want to get there myself". Also use it when they set up a scratch or practice project to explore an idea. Don't use it when the user just wants the task done.
 ---
 
 # Deep dive
@@ -14,7 +14,7 @@ Most of what follows comes from things a real learner corrected during a session
 
 1. **Ground yourself before planning.** Read the real code the topic is about (the upstream repo, the file and line in question), the learner's practice workspace, and the toolchain version. Steps that point to real `file:line` locations and real signatures are much better than generic ones.
 2. **Find the destination.** Usually it's a decision or artifact: "understand why design D was chosen so I can defend it or propose a better one", "be ready to open this PR". If it isn't clear from context, ask once.
-3. **Show a short roadmap**: 5–8 one-line steps from the basics up to the destination. Its purpose is orientation; it isn't a contract. You'll insert detours and merge steps as you learn what they already know.
+3. **Show a short roadmap**: 5–8 one-line steps from the basics up to the destination. Its purpose is orientation; it isn't a contract. You'll insert detours, split steps that turn out to be too big, and skip ones they already know.
 4. Then give **Step 1 only**.
 
 ## The shape of a step
@@ -24,12 +24,50 @@ Each step has **one action** and **one question**. When a "step" contains four n
 ```
 ## Step N: <short title>
 
-**Read:** <one or two specific sections, with direct links or local paths>   (optional)
+**Read:** [<page title>, "<section name>"](<full URL or absolute local path>): <what to look for there>
 
 **Do:** <one action, described as a goal or outcome>
 
 **Answer:** <one question that makes them state what they observed or concluded>
 ```
+
+Include the **Read:** line whenever a source exists for what the step teaches, which is nearly always. See "Sources" below for how to write it.
+
+### How big one action is
+
+A step ends at the first point where the learner has something to show or something to ask. They run into questions *while* doing the work. If the step is large, they have to finish all of it before they can raise any of them, and when something is wrong, neither of you can tell which part caused it.
+
+So these are separate steps, even when they feel like one unit to you:
+
+- **Writing a piece of logic** is one step.
+- **Running it on a particular input and looking at the result** is the next step.
+- **Reading** something longer than a few paragraphs is its own step.
+
+Split the step if any of these is true:
+
+- The **Do** contains "then", "and then", "after that" or "once that works".
+- It combines two kinds of activity: writing code, running or observing, reading.
+- It asks for an implementation *and* supplies test data, a table of inputs, or a program to run it on. The data belongs to the next step.
+- It needs more than about two sentences, or it says "leave X for now", which means the scope is already big enough to need limits.
+- The **Answer** question requires doing something new first ("repeat the experiment and tell me…"). That's another action in disguise.
+
+Too big:
+
+> **Do:** make `fromExecutable` build the instructions array from the slots, with each two-slot instruction as one entry and `ptr` as the slot it started at. Leave the other fields as placeholders for now. Then run it on this hand-built program and print index, ptr and opc for each entry: *(table of 5 instructions)*
+
+Split:
+
+> **Step 3. Do:** make `fromExecutable` build the instructions array from the slots. A two-slot instruction becomes one entry, and each entry's `ptr` is the slot it started at.
+> **Answer:** how does your loop decide how many slots to advance?
+>
+> *(they come back, you review, you discuss what they hit)*
+>
+> **Step 4. Do:** run it on this program and print index, ptr and opc for each entry: *(table)*
+> **Answer:** which entries have a `ptr` different from their index, and why?
+
+The one exception is a **quick experiment**: change one line, run, and see what happens. The change takes a minute and the observation is the whole point, so it's one action.
+
+Tell the learner early that they can stop in the middle of a step and ask. They shouldn't feel they have to finish before talking.
 
 Rules that make steps work:
 
@@ -54,7 +92,7 @@ When a question shows a gap in the basics ("why can't I implement `Iterator` dir
 
 - Answer the actual question concretely. If they have it backwards, say so directly and then give the correct model.
 - Prove claims when you can: compile a two-line scratch file and quote the real error message. That is more convincing than your say-so, and it keeps you honest.
-- Point to the authoritative source for that concept.
+- Send them to read the authoritative source for that concept, with a **Read:** line as described in "Sources". Your explanation is there to orient them; the source is where they get the full picture first-hand.
 - Optionally give one micro-experiment that confirms it.
 - **Return to the main path explicitly**: "When you're ready, Step 5's question is still open: …". It should always be clear where you are.
 
@@ -68,7 +106,33 @@ Slow down and switch to something concrete. Don't repeat the same explanation mo
 
 ## Sources
 
-Point to the most authoritative source, and name the exact section:
+### Send them to read; don't cite
+
+The learner wants first-hand information from the original source. Your explanation orients them, and the reading is the main material. So whenever you explain a concept, whether in a step, a detour, or a review, tell them what to go and read, as an instruction with a link they can click.
+
+A closing line such as *Source: MDN, "for...in" and "for...of"* doesn't do this. It's a citation: it shows that you had a source, but it gives them nothing to open and doesn't ask them to read anything. Models produce this form by default, so check each reply for it.
+
+Not this:
+
+> Source: MDN, "for...in" and "for...of"; the "for...of" page has a section comparing the two.
+
+This:
+
+> **Read:** MDN, [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of), the section "Difference between for...of and for...in". It has a short example that prints what each loop yields for the same array.
+
+A **Read:** line has three parts:
+
+1. **A clickable link**: a full URL, or an absolute local path with a line number for source code. A source name without a link doesn't count.
+2. **The exact section**, named in words, so they don't have to read the whole page.
+3. **A few words on what to look for**, so they read with a purpose.
+
+Use links you're sure of. If you have a way to fetch or search the page, check the URL and the section name before sending them there. If you aren't sure of an anchor, link to the page and name the section in words. A dead link costs the learner more than no link.
+
+In a step, **Read:** comes before **Do:**. In a detour, it comes after your explanation and before you return to the main path.
+
+### Which source
+
+Point to the most authoritative source available:
 
 1. **The real code**: the upstream repo at `file:line`, and the language's own library source installed locally. For Rust that's `$(rustc --print sysroot)/lib/rustlib/src/rust/library/…`. Reading the real `impl` header is often the fastest way to the key insight.
 2. **Official docs**: the language book, reference, std docs, and edition guide; for other ecosystems, their equivalents.
@@ -85,7 +149,7 @@ At the destination, have the learner **write the argument themselves**: the issu
 
 ## Tone and pacing
 
-- Replies should be short. A step is a few lines, not an essay. Longer explanations belong in detours, and only as long as the concept requires.
+- Replies should be short. A step is a few lines, not an essay. Longer explanations belong in detours, and only as long as the concept requires. When a reply is getting long, cut your own explanation. Don't drop the **Read:** line, and don't shorten the session by packing two actions into one step.
 - Accept corrections about the process immediately and change course without over-apologizing. Their preferences about pacing override anything in this skill.
 - Don't write or edit the learner's practice code unless they ask. You may create and delete scratch files anywhere else to check things.
 - If the session is long or likely to be resumed later, offer to record progress (roadmap, current step, insights so far) in a short notes file wherever they choose.

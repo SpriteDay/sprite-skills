@@ -23,6 +23,13 @@ Setup: an empty practice crate, with a local clone of `sbpf` for reference.
 | Said "`Range<T>` has no bounds on the struct" | "What struct exactly?" | Don't skip the basics: `a..=b` becomes `RangeInclusive::new(a, b)`. Show it in the local std source |
 | Wrote a hint about extra state that was too abstract | "I don't understand" | Switch to a trace table with a `???` row |
 
+Two more corrections came from later sessions run with this skill:
+
+| What the tutor did | What the learner said | Rule that came out of it |
+|---|---|---|
+| Ended a detour with *Source: MDN, "for...in" and "for...of"* | "No 'go read', no links, just 'according to MDN'" | Send them to read: a **Read:** line with a link, the section, and what to look for |
+| One **Do:** that said "implement X… Then run it on this program and print…" | "These are different tasks. I have to finish all of it before I can even discuss what I hit" | Implementing and running are separate steps |
+
 ## Moments that worked
 
 - **The learner's own observation became the key insight.** They said "we can create the range without deriving anything". Tutor: "Correct, and that's the key to the whole topic: the bounds are on methods and impls, not on the struct." That led straight to reading `impl<A: Step> Iterator for ops::RangeInclusive<A>`.
@@ -37,19 +44,60 @@ Setup: an empty practice crate, with a local clone of `sbpf` for reference.
   Each detour ended with "Step N's question is still open: …".
 - **A side question tied to a later step.** "Shouldn't it be `as_iter()`?" Answer: C-CONV prefixes describe conversions of `self`, and there's no `self` here. `strum::EnumIter` sets the precedent for an associated `iter()`, and `all()` is the alternative. The full comparison was deferred to step 7.
 
-## Example step, in the final form
+## Example steps, in the final form
+
+One piece of work, given as three steps. Each one ends where the learner has something to show or ask.
 
 ```
 ## Step 5: The `ALL` array
 
-**Read:**
-- Rust Book 3.2, "The Array Type" (the length is part of the type)
-- Rust Book 10.2, "Returning Types That Implement Traits"
+**Read:** Rust Book 3.2, ["The Array Type"](https://doc.rust-lang.org/book/ch03-02-data-types.html#the-array-type):
+how the length is part of an array's type.
 
-**Do:** on `MyVersion`, add an associated constant holding every version except
-`Reserved`, and an associated function `iter()` that returns an iterator over it.
-Use it in a `for` loop in `main`.
+**Do:** on `MyVersion`, add an associated constant holding every version except `Reserved`.
 
-**Answer:** repeat the V4 experiment with this design. Add a variant, and tell me
-what the compiler forced you to change, what it didn't, and what `iter()` yields.
+**Answer:** what type did you give the constant, and which part of that type would
+have to change if a version were added?
+```
+
+```
+## Step 6: An iterator over `ALL`
+
+**Read:** Rust Book 10.2, ["Returning Types That Implement Traits"](https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-implement-traits):
+what a caller can and can't know about an `impl Trait` return value.
+
+**Do:** add an associated function `iter()` that returns an iterator over `ALL`,
+and loop over it in `main`.
+
+**Answer:** what does the loop variable's type turn out to be in `main`?
+```
+
+```
+## Step 7: The V4 experiment again
+
+**Do:** add a variant to the enum and change nothing else. Build and run.
+
+**Answer:** what did the compiler force you to change, and what does `iter()` yield?
+```
+
+Step 7 is a quick experiment (one small change, then observe), so it stays one step.
+
+## Example detour, in the final form
+
+The learner asked: "What's the difference between `iter()` and `into_iter()`?"
+
+```
+You have it reversed. <short, direct explanation: `iter()` always borrows;
+`into_iter()` takes `self` by value, so what it yields depends on what you call
+it on. A three-row table of the `IntoIterator` impls for arrays.>
+
+**Read:** std docs, ["The three forms of iteration"](https://doc.rust-lang.org/std/iter/index.html#the-three-forms-of-iteration).
+It covers exactly this in half a page; look at which form `for x in &v` uses.
+
+**Do:** loop over an array of two `String`s with each method, and use the array
+after each loop.
+
+**Answer:** which version fails to compile, and what does the error say?
+
+Step 5's question is still open after this: …
 ```
